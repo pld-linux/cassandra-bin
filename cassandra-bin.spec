@@ -8,7 +8,7 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
 Name:		cassandra-bin
 Version:	0.7.0
-Release:	0.%{rccode}.1
+Release:	0.%{rccode}.2
 License:	ASF
 Group:		Applications/Databases
 Source0:	http://mirror.nyi.net/apache//cassandra/%{version}/apache-cassandra-%{version}-%{rccode}-bin.tar.gz
@@ -18,6 +18,7 @@ Source2:	%{shname}.init
 URL:		http://cassandra.apache.org/
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
+Suggests:	jna
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
