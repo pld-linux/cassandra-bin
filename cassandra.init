@@ -1,11 +1,12 @@
 #!/bin/sh
 #
-# glusterfsd	Cassandra 
+# cassandra 	Cassandra 
 #
-# chkconfig:	345 14 89
+# chkconfig:	345 84 25
 #
 # description:	Cassandra database node
 #
+# processname:  cassandra
 
 # Source function library
 . /etc/rc.d/init.d/functions

@@ -45,10 +45,8 @@ CLASSPATH=$CASSANDRA_CONF # :$cassandra_bin
 #    CLASSPATH=$CLASSPATH:$jar
 # done
 
-
 # for jar in /usr/share/cassandra/*.jar; do
 #     CLASSPATH=$CLASSPATH:$jar
 # done
 CLASSPATH=$CLASSPATH:/usr/share/cassandra/*
-print "DEBUG: CLASSPATH: $CLASSPATH"
 
