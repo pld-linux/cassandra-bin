@@ -70,6 +70,7 @@ stop() {
 		# rm /var/lock/subsys/cassandra
                      fail
                      log_failed "cassandra shutdown (signalling error)"
+		     rm /var/lock/subsys/cassandra
 		fi
 		## echo "DEBUG: kill retval: $RETVAL"
 	else
