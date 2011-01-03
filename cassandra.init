@@ -34,7 +34,7 @@ start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/cassandra ]; then
 		msg_starting cassandra
-		daemon /usr/sbin/cassandra  -p /var/run/cassandra.pid  
+		daemon --user cassandra /usr/sbin/cassandra  -p /var/run/cassandra/cassandra.pid  
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/cassandra
 	else
@@ -47,8 +47,31 @@ stop() {
 	if [ -f /var/lock/subsys/cassandra ]; then
 		# Stop daemons.
 		msg_stopping cassandra
-		killproc --pidfile /var/run/cassandra.pid cassandra -TERM
-		rm -f /var/lock/subsys/cassandra
+		# TODO: Fix it to work it properly with default PLD starting script scheme
+		# I do not know how to make 
+		pid=$(cat /var/run/cassandra/cassandra.pid)
+		## echo "DEBUG: Using pid=$pid."
+		kill -TERM  $pid  
+		# 0 - call succeed
+                RETVAL=$?
+		if [ $RETVAL -eq 0 ]; then # Success, giving some time for cassandra to flush.
+		    checkpid $pid && sleep 1
+		    checkpid $pid && sleep 3
+		    checkpid $pid && sleep 5
+		    if checkpid $pid;  then
+			fail
+			log_failed "cassandra shutdown (timeout after -TERM)"
+		    else
+			ok
+			log_success "cassandra shutdown"
+		    fi
+		    rm -f /var/lock/subsys/cassandra
+		else
+		# rm /var/lock/subsys/cassandra
+                     fail
+                     log_failed "cassandra shutdown (signalling error)"
+		fi
+		## echo "DEBUG: kill retval: $RETVAL"
 	else
 		msg_not_running cassandra
 	fi

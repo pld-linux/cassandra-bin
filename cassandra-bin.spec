@@ -1,18 +1,22 @@
 %include	/usr/lib/rpm/macros.java
 # TODO: Fix .init  cassandra status does not work now.
-# TODO: Fix .init restarts, now seems stopping does not wait until cassandra is really stopped ?
+# TODO: Fix .init stop routine it is now subset of PLD default one
+# TODO: Fix of data/ cassandra created dirs/files privilages (now they are all readable)
+# TODO: Consider adding          
+#                   cassandra       -       memlock         unlimited
+#   to /etc/security/limits.conf ?
 
 %define     shname cassandra
-%define     rccode rc3
+%define     rccode rc4
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
 Name:		cassandra-bin
 Version:	0.7.0
-Release:	0.%{rccode}.3
+Release:	0.%{rccode}.1
 License:	ASF
 Group:		Applications/Databases
 Source0:	http://mirror.nyi.net/apache//cassandra/%{version}/apache-cassandra-%{version}-%{rccode}-bin.tar.gz
-# Source0-md5:	8e5cfc07178cd57e05ef81cad18ef170
+# Source0-md5:	19b26eb1d25454a2da0731b769ab3066
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 URL:		http://cassandra.apache.org/
