@@ -7,16 +7,16 @@
 #   to /etc/security/limits.conf ?
 
 %define     shname cassandra
-%define     rccode rc4
+# %%define     rccode rc4
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
 Name:		cassandra-bin
 Version:	0.7.0
-Release:	0.%{rccode}.1
+Release:	1
 License:	ASF
 Group:		Applications/Databases
-Source0:	http://mirror.nyi.net/apache//cassandra/%{version}/apache-cassandra-%{version}-%{rccode}-bin.tar.gz
-# Source0-md5:	19b26eb1d25454a2da0731b769ab3066
+Source0:	http://mirror.nyi.net/apache//cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
+# Source0-md5:	475eb1a95fe8a4def78903bc6726852e
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 URL:		http://cassandra.apache.org/
@@ -39,7 +39,7 @@ ostatecznie spójna. Tak jak BigTable daje do dyspozycji model danych
 oparty na ColumnFamily bogatszy niż typowwe systemy klucza i wartości.
 
 %prep
-%setup -q -n apache-cassandra-%{version}-%{rccode}
+%setup -q -n apache-cassandra-%{version}
 
 %build
 
