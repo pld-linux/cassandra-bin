@@ -1,18 +1,17 @@
-%include	/usr/lib/rpm/macros.java
 # TODO: Fix .init  cassandra status does not work now.
 # TODO: Fix .init stop routine it is now subset of PLD default one
 # TODO: Fix of data/ cassandra created dirs/files privilages (now they are all readable)
-# TODO: Consider adding          
+# TODO: Consider adding
 #                   cassandra       -       memlock         unlimited
 #   to /etc/security/limits.conf ?
 
 %define     shname cassandra
-# %%define     rccode rc4
+%include	/usr/lib/rpm/macros.java
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
 Name:		cassandra-bin
 Version:	0.7.1
-Release:	1
+Release:	2
 License:	ASF
 Group:		Applications/Databases
 Source0:	http://mirror.nyi.net/apache//cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
@@ -22,6 +21,8 @@ Source2:	%{shname}.init
 URL:		http://cassandra.apache.org/
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
+Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 Suggests:	java-jna
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -40,8 +41,6 @@ oparty na ColumnFamily bogatszy niż typowwe systemy klucza i wartości.
 
 %prep
 %setup -q -n apache-cassandra-%{version}
-
-%build
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -84,17 +83,15 @@ rm -rf $RPM_BUILD_ROOT
 %groupadd -g 259 -r cassandra
 %useradd -M -o -r -u 259 -d /var/lib/%{shname} -s /bin/sh -g cassandra -c "Cassandra Server" cassandra
 
+%post
+/sbin/chkconfig --add cassandra
+%service cassandra restart
+
 %preun
 if [ "$1" = "0" ]; then
-    %service cassandra stop
-    /sbin/chkconfig --del cassandra
+	%service cassandra stop
+	/sbin/chkconfig --del cassandra
 fi
-
-# %post upstart
-# %upstart_post cassandra
-
-# %postun upstart
-# %upstart_postun cassandra
 
 %files
 %defattr(644,root,root,755)
