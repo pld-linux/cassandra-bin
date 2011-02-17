@@ -10,12 +10,12 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
 Name:		cassandra-bin
-Version:	0.7.1
-Release:	2
+Version:	0.7.2
+Release:	1
 License:	ASF
 Group:		Applications/Databases
 Source0:	http://mirror.nyi.net/apache//cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	03f1e4060493f319e36f7c2f026ddae8
+# Source0-md5:	1649590468866cde15cd4fecc0a99aa8
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 URL:		http://cassandra.apache.org/
@@ -35,7 +35,7 @@ a ColumnFamily-based data model richer than typical key/value systems.
 
 %description -l pl.UTF-8
 Cassandra łaczy technologie systemów rozproszonych z Dynamo i model
-danych z Googlowskiego BigTable. Tak jak Dynamo, Cassandra is
+danych z Googlowskiego BigTable. Tak jak Dynamo, Cassandra jest
 ostatecznie spójna. Tak jak BigTable daje do dyspozycji model danych
 oparty na ColumnFamily bogatszy niż typowwe systemy klucza i wartości.
 
