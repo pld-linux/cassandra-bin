@@ -10,12 +10,12 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
 Name:		cassandra-bin
-Version:	0.7.4
+Version:	0.7.5
 Release:	1
 License:	ASF
 Group:		Applications/Databases
 Source0:        http://ftp.tpnet.pl/vol/d1/apache//cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	ee0d7ac9b73dedb0a5dca1c34499c2d5
+# Source0-md5:	3a74739c1eb277c23b40302cc5a149bc
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 URL:		http://cassandra.apache.org/
