@@ -10,7 +10,7 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
 Name:		cassandra-bin
-Version:	0.7.6
+Version:	0.7.8
 Release:	1
 License:	ASF
 Group:		Applications/Databases
