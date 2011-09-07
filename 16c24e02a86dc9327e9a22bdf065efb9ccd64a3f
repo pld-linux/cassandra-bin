@@ -1,0 +1,4 @@
+- Updated to rc4.
+  Fixed working as cassandra user.
+  Fixed java class path to use java-jna.
+  Working restart, though not using PLD scripts on stop.
