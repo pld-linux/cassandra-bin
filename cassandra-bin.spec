@@ -1,20 +1,20 @@
-# TODO: Fix .init  cassandra status does not work now.
+# TODO: Fix .init cassandra status does not work now.
 # TODO: Fix .init stop routine it is now subset of PLD default one
 # TODO: Fix of data/ cassandra created dirs/files privilages (now they are all readable)
 # TODO: Consider adding
-#                   cassandra       -       memlock         unlimited
+#		cassandra	-	memlock	unlimited
 #   to /etc/security/limits.conf ?
 
-%define     shname cassandra
+%define	shname cassandra
 %include	/usr/lib/rpm/macros.java
 Summary:	Cassandra database binary package
-Summary(pl.UTF-8):	Baza danych Cassandra wersja binarna.
+Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	0.7.9
 Release:	1
 License:	ASF
 Group:		Applications/Databases
-Source0:        http://ftp.tpnet.pl/vol/d1/apache//cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
+Source0:	http://ftp.tpnet.pl/vol/d1/apache//cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
 # Source0-md5:	6c7ae6a2c2e58e72261fa1f7321696fb
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
@@ -34,47 +34,24 @@ Cassandra is eventually consistent. Like BigTable, Cassandra provides
 a ColumnFamily-based data model richer than typical key/value systems.
 
 %description -l pl.UTF-8
-Cassandra łaczy technologie systemów rozproszonych z Dynamo i model
-danych z Googlowskiego BigTable. Tak jak Dynamo, Cassandra jest
+Cassandra łączy technologie systemów rozproszonych z Dynamo i model
+danych z googlowskiego BigTable. Tak jak Dynamo, Cassandra jest
 ostatecznie spójna. Tak jak BigTable daje do dyspozycji model danych
-oparty na ColumnFamily bogatszy niż typowwe systemy klucza i wartości.
+oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 
 %prep
 %setup -q -n apache-cassandra-%{version}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_javadir}
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{shname}/
-install -d $RPM_BUILD_ROOT%{_datadir}/%{shname}
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d/
-cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/%{shname}
-cp -p lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
-install -d $RPM_BUILD_ROOT%{_sbindir}
-cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
-install -d $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/cassandra-cli $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/nodetool $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/clustertool $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/json2sstable $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/sstable2json $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/schematool $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/config-converter $RPM_BUILD_ROOT%{_bindir}
-cp -p bin/sstablekeys $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,%{_sysconfdir}/%{shname},%{_bindir},%{_sbindir},%{_datadir}/%{shname}} \
+	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}}
+
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
-install -d $RPM_BUILD_ROOT/var/lib/%{shname}/commitlog
-install -d $RPM_BUILD_ROOT/var/lib/%{shname}/data
-install -d $RPM_BUILD_ROOT/var/lib/%{shname}/saved_caches
-install -d $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-cp -p conf/log4j-server.properties $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-cp -p conf/cassandra.yaml $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-cp -p conf/cassandra-env.sh $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-cp -p conf/access.properties $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-cp -p conf/passwd.properties $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-cp -p conf/cassandra-topology.properties $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-cp -p conf/README.txt $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-install -d $RPM_BUILD_ROOT/var/run/%{shname}
-install -d $RPM_BUILD_ROOT/var/log/%{shname}
+cp -p bin/{*sstable*,*tool,cassandra-cli,config-converter} $RPM_BUILD_ROOT%{_bindir}
+cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
+cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
+cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -113,5 +90,5 @@ fi
 %attr(755,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.sh
 %attr(640,root,cassandra) /var/lib/%{shname}/conf/*.txt
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.yaml
-%attr(750,cassandra,cassandra) %dir /var/run/%{shname}
 %attr(750,cassandra,cassandra) %dir /var/log/%{shname}
+%attr(750,cassandra,cassandra) %dir /var/run/%{shname}
