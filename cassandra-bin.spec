@@ -10,12 +10,13 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	0.7.9
-Release:	1
+Version:	0.8.7
+Release:	0.1
 License:	ASF
 Group:		Applications/Databases
+# http://www.apache.org/dyn/closer.cgi?path=/cassandra/0.8.7/apache-cassandra-0.8.7-bin.tar.gz
 Source0:	http://ftp.tpnet.pl/vol/d1/apache//cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	6c7ae6a2c2e58e72261fa1f7321696fb
+# Source0-md5:	d951018abe20988a1947ba9d883a0080
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 URL:		http://cassandra.apache.org/
@@ -48,7 +49,7 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,%{_sysconfdir}/%{shname},%{_bindir}
 	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}}
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
-cp -p bin/{*sstable*,*tool,cassandra-cli,config-converter} $RPM_BUILD_ROOT%{_bindir}
+cp -p bin/{*sstable*,*tool,cassandra-cli} $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
@@ -76,11 +77,12 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/cassandra
 %attr(755,root,root) %{_bindir}/cassandra-cli
 %attr(755,root,root) %{_bindir}/nodetool
-%attr(755,root,root) %{_bindir}/clustertool
+# %attr(755,root,root) %{_bindir}/clustertool
 %attr(755,root,root) %{_bindir}/json2sstable
 %attr(755,root,root) %{_bindir}/sstable2json
-%attr(755,root,root) %{_bindir}/schematool
-%attr(755,root,root) %{_bindir}/config-converter
+%attr(755,root,root) %{_bindir}/sstableloader
+# %attr(755,root,root) %{_bindir}/schematool
+# %attr(755,root,root) %{_bindir}/config-converter
 %attr(755,root,root) %{_bindir}/sstablekeys
 %attr(755,root,root) %{_sbindir}/cassandra
 %{_datadir}/%{shname}
