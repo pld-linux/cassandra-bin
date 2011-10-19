@@ -11,7 +11,7 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	0.8.7
-Release:	0.1
+Release:	1
 License:	ASF
 Group:		Applications/Databases
 # http://www.apache.org/dyn/closer.cgi?path=/cassandra/0.8.7/apache-cassandra-0.8.7-bin.tar.gz
@@ -19,6 +19,7 @@ Source0:	http://ftp.tpnet.pl/vol/d1/apache//cassandra/%{version}/apache-cassandr
 # Source0-md5:	d951018abe20988a1947ba9d883a0080
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
+Patch0:		%{name}-jamm_path_fix.patch
 URL:		http://cassandra.apache.org/
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
@@ -42,6 +43,7 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 
 %prep
 %setup -q -n apache-cassandra-%{version}
+%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
