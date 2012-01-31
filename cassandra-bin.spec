@@ -11,7 +11,7 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	0.8.9
-Release:	1
+Release:	2
 License:	ASF
 Group:		Applications/Databases
 # http://www.apache.org/dyn/closer.cgi?path=/cassandra/0.8.7/apache-cassandra-0.8.7-bin.tar.gz
