@@ -19,6 +19,7 @@ Source0:	http://ftp.tpnet.pl/vol/d1/apache//cassandra/%{version}/apache-cassandr
 # Source0-md5:	bce05ca64217f7317190e46428a6df3c
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
+Source3:	%{name}.tmpfiles
 Patch0:		%{name}-jamm_path_fix.patch
 URL:		http://cassandra.apache.org/
 BuildRequires:	rpm-javaprov
@@ -48,13 +49,16 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,%{_sysconfdir}/%{shname},%{_bindir},%{_sbindir},%{_datadir}/%{shname}} \
-	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}}
+	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
 cp -p bin/{*sstable*,*tool,cassandra-cli} $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
+
+install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{shname}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -88,6 +92,7 @@ fi
 %attr(755,root,root) %{_bindir}/sstablekeys
 %attr(755,root,root) %{_sbindir}/cassandra
 %{_datadir}/%{shname}
+/usr/lib/tmpfiles.d/%{shname}.conf
 %attr(750,cassandra,cassandra) %dir /var/lib/%{shname}
 %attr(750,root,cassandra) %dir /var/lib/%{shname}/conf
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.properties
