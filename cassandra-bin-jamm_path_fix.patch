@@ -1,11 +1,11 @@
---- ./conf/cassandra-env.sh.jamm_path_fix	2011-10-19 16:27:07.373001180 +0200
-+++ ./conf/cassandra-env.sh	2011-10-19 16:27:30.366552514 +0200
-@@ -100,7 +100,7 @@ JVM_OPTS="$JVM_OPTS -ea"
+--- ./conf/cassandra-env.sh.jamm_path_fix	2012-05-16 10:11:38.016189136 +0200
++++ ./conf/cassandra-env.sh	2012-05-16 10:12:25.489984266 +0200
+@@ -121,7 +121,7 @@ JVM_OPTS="$JVM_OPTS -ea"
  check_openjdk=`"${JAVA:-java}" -version 2>&1 | awk '{if (NR == 2) {print $1}}'`
  if [ "$check_openjdk" != "OpenJDK" ]
  then
--    JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.2.2.jar"
-+    JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/cassandra/jamm-0.2.2.jar"
+-    JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.2.5.jar"
++    JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/cassandra/jamm-0.2.5.jar"
  fi
  
  # enable thread priorities, primarily so we can give periodic tasks
