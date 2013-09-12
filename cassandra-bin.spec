@@ -10,13 +10,11 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	1.0.11
+Version:	1.1.12
 Release:	1
 License:	ASF
 Group:		Applications/Databases
-Source0:	http://www.eu.apache.org/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	be2d87062b7184602f417fd9a4618f67
-
+Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
@@ -50,7 +48,7 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,%{_sysconfdir}/%{shname},%{_bindir},%{_sbindir},%{_datadir}/%{shname}} \
 	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}} \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
 cp -p bin/{*sstable*,*tool,cassandra-cli} $RPM_BUILD_ROOT%{_bindir}
@@ -58,7 +56,7 @@ cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
 
-install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{shname}.conf
+install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -83,16 +81,14 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/cassandra
 %attr(755,root,root) %{_bindir}/cassandra-cli
 %attr(755,root,root) %{_bindir}/nodetool
-# %attr(755,root,root) %{_bindir}/clustertool
 %attr(755,root,root) %{_bindir}/json2sstable
 %attr(755,root,root) %{_bindir}/sstable2json
-%attr(755,root,root) %{_bindir}/sstableloader
-# %attr(755,root,root) %{_bindir}/schematool
-# %attr(755,root,root) %{_bindir}/config-converter
+%attr(755,root,root) %{_bindir}/sstablescrub
 %attr(755,root,root) %{_bindir}/sstablekeys
+%attr(755,root,root) %{_bindir}/sstableloader
 %attr(755,root,root) %{_sbindir}/cassandra
 %{_datadir}/%{shname}
-/usr/lib/tmpfiles.d/%{shname}.conf
+%{systemdtmpfilesdir}/%{shname}.conf
 %attr(750,cassandra,cassandra) %dir /var/lib/%{shname}
 %attr(750,root,cassandra) %dir /var/lib/%{shname}/conf
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.properties
