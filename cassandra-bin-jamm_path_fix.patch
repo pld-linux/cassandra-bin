@@ -1,11 +1,11 @@
---- ./conf/cassandra-env.sh.jamm_path_fix	2012-05-16 10:11:38.016189136 +0200
-+++ ./conf/cassandra-env.sh	2012-05-16 10:12:25.489984266 +0200
-@@ -121,7 +121,7 @@ JVM_OPTS="$JVM_OPTS -ea"
- check_openjdk=`"${JAVA:-java}" -version 2>&1 | awk '{if (NR == 2) {print $1}}'`
- if [ "$check_openjdk" != "OpenJDK" ]
- then
--    JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.2.5.jar"
-+    JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/cassandra/jamm-0.2.5.jar"
- fi
+--- ./conf/cassandra-env.sh.jamm_path_fix	2014-10-21 16:31:37.000000000 +0200
++++ ./conf/cassandra-env.sh	2015-01-12 21:31:40.086273885 +0100
+@@ -168,7 +168,7 @@ JMX_PORT="7199"
+ JVM_OPTS="$JVM_OPTS -ea"
  
- # enable thread priorities, primarily so we can give periodic tasks
+ # add the jamm javaagent
+-JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.2.5.jar"
++JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/cassandra/jamm-0.2.5.jar"
+ 
+ # some JVMs will fill up their heap when accessed via JMX, see CASSANDRA-6541
+ JVM_OPTS="$JVM_OPTS -XX:+CMSClassUnloadingEnabled"
