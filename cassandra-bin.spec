@@ -11,7 +11,7 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	2.0.11
-Release:	1
+Release:	2
 License:	ASF
 Group:		Applications/Databases
 Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
@@ -28,6 +28,7 @@ BuildRequires:  rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,preun):	/sbin/chkconfig
 Requires:       python-modules
+Requires:       python
 Requires:	rc-scripts
 Suggests:	java-jna
 BuildArch:	noarch
