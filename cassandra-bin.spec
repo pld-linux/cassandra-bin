@@ -10,25 +10,25 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	2.0.11
-Release:	2
+Version:	2.0.16
+Release:	1
 License:	ASF
 Group:		Applications/Databases
 Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:  f8021f9defcdd6957ff78de7c6d5308b
+# Source0-md5:	17f4dac611c1eae631a27b1105164920
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
 Patch0:		%{name}-jamm_path_fix.patch
 Patch1:		%{name}-cqlsh_path_fix.patch
 URL:		http://cassandra.apache.org/
-BuildRequires:  python-distribute
+BuildRequires:	python-distribute
 BuildRequires:	rpm-javaprov
-BuildRequires:  rpm-pythonprov
+BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,preun):	/sbin/chkconfig
-Requires:       python-modules
-Requires:       python
+Requires:	python
+Requires:	python-modules
 Requires:	rc-scripts
 Suggests:	java-jna
 BuildArch:	noarch
@@ -63,18 +63,18 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,%{_sysconfdir}/%{shname},%{_bindir}
 	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
 
 rm bin/*.bat
 cp -p bin/{cqlsh,*sstable*,*tool,cassandra-cli} $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # use bundled libs for python-cql - from cqlsh doc
-cp -p %{SOURCE1} lib/cql-internal-only-1.4.1.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
+cp -p %{SOURCE1} lib/cql-internal-only-1.4.2.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p %{SOURCE1} lib/thrift-python-internal-only-0.9.1.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
 
-install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
 
 cd pylib
 %{__python} setup.py \
