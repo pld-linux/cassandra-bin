@@ -11,10 +11,12 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	1.1.12
-Release:	1
+Release:	2
 License:	ASF
 Group:		Applications/Databases
-Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
+# http://archive.apache.org/dist/cassandra/1.1.12/apache-cassandra-1.1.12-bin.tar.gz
+Source0:	http://archive.apache.org/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
+# Source0-md5:	e0dc7fcfd4cbcff406de98ff3e7a8f79
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
