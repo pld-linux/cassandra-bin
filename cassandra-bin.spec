@@ -10,13 +10,13 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	1.1.12
-Release:	2
+Version:	1.2.19
+Release:	1
 License:	ASF
 Group:		Applications/Databases
 # http://archive.apache.org/dist/cassandra/1.1.12/apache-cassandra-1.1.12-bin.tar.gz
 Source0:	http://archive.apache.org/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	e0dc7fcfd4cbcff406de98ff3e7a8f79
+# Source0-md5:	06e0a3d4242405bbf1b6094e409d6e18
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
@@ -52,13 +52,13 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,%{_sysconfdir}/%{shname},%{_bindir}
 	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
 cp -p bin/{*sstable*,*tool,cassandra-cli} $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
 
-install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
