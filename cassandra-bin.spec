@@ -10,12 +10,12 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	2.0.17
-Release:	1
+Version:	2.1.11
+Release:	0.1
 License:	ASF
 Group:		Applications/Databases
 Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	5c3a1dd76f5261900e3f165f3e964815
+# Source0-md5:	9f6c940e4201575804d07a2e103d1d61
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
@@ -70,8 +70,9 @@ cp -p bin/{cqlsh,*sstable*,*tool,cassandra-cli} $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # use bundled libs for python-cql - from cqlsh doc
-cp -p %{SOURCE1} lib/cql-internal-only-1.4.2.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
-cp -p %{SOURCE1} lib/thrift-python-internal-only-0.9.1.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
+# cp -p %{SOURCE1} lib/cql-internal-only-1.4.2.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
+# cp -p %{SOURCE1} lib/thrift-python-internal-only-0.9.1.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
+cp -p %{SOURCE1} lib/*.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
 
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
@@ -108,12 +109,12 @@ fi
 %attr(755,root,root) %{_bindir}/cassandra-cli
 %attr(755,root,root) %{_bindir}/cqlsh
 %attr(755,root,root) %{_bindir}/nodetool
-%attr(755,root,root) %{_bindir}/json2sstable
-%attr(755,root,root) %{_bindir}/sstable2json
+# %attr(755,root,root) %{_bindir}/json2sstable
+## %attr(755,root,root) %{_bindir}/sstable2json
 %attr(755,root,root) %{_bindir}/sstablescrub
 %attr(755,root,root) %{_bindir}/sstablekeys
 %attr(755,root,root) %{_bindir}/sstableloader
-%attr(755,root,root) %{_bindir}/sstablesplit
+## %attr(755,root,root) %{_bindir}/sstablesplit
 %attr(755,root,root) %{_bindir}/sstableupgrade
 %attr(755,root,root) %{_sbindir}/cassandra
 %{_datadir}/%{shname}
