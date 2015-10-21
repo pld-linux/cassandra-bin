@@ -11,7 +11,7 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	2.1.11
-Release:	0.1
+Release:	0.3
 License:	ASF
 Group:		Applications/Databases
 Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
@@ -21,6 +21,7 @@ Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
 Patch0:		%{name}-jamm_path_fix.patch
 Patch1:		%{name}-cqlsh_path_fix.patch
+Patch2:		%{name}-pld_logging.patch
 URL:		http://cassandra.apache.org/
 BuildRequires:	python-distribute
 BuildRequires:	rpm-javaprov
@@ -50,6 +51,7 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 %setup -q -n apache-cassandra-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # current version of cqlsh supports only python 2.
@@ -73,8 +75,10 @@ cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # cp -p %{SOURCE1} lib/cql-internal-only-1.4.2.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # cp -p %{SOURCE1} lib/thrift-python-internal-only-0.9.1.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p %{SOURCE1} lib/*.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
-cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-
+cp -p conf/{*.properties,*.yaml,*.xml,cassandra-env.sh,hotspot_compiler,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
+# ,triggers
+install -d $RPM_BUILD_ROOT/var/lib/%{shname}/conf/triggers
+cp -p conf/triggers/*.txt  $RPM_BUILD_ROOT/var/lib/%{shname}/conf/triggers
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
 
 cd pylib
@@ -125,6 +129,11 @@ fi
 %attr(755,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.sh
 %attr(640,root,cassandra) /var/lib/%{shname}/conf/*.txt
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.yaml
+%attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.xml
+%attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/hotspot_compiler
+%attr(750,cassandra,cassandra) %dir /var/lib/%{shname}/conf/triggers
+%attr(640,root,cassandra) /var/lib/%{shname}/conf/triggers/*.txt
+
 %attr(750,cassandra,cassandra) %dir /var/log/%{shname}
 %attr(750,cassandra,cassandra) %dir /var/run/%{shname}
 %{py_sitescriptdir}/cqlshlib

@@ -1,0 +1,20 @@
+--- apache-cassandra-2.1.11/conf/logback.xml.pld_logging	2015-10-21 16:21:19.880490844 +0200
++++ apache-cassandra-2.1.11/conf/logback.xml	2015-10-21 16:22:17.896836142 +0200
+@@ -20,9 +20,9 @@
+ <configuration scan="true">
+   <jmxConfigurator />
+   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+-    <file>${cassandra.logdir}/system.log</file>
++	  <file>/var/log/cassandra/system.log</file>
+     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+-      <fileNamePattern>${cassandra.logdir}/system.log.%i.zip</fileNamePattern>
++	    <fileNamePattern>/var/log/cassandra/system.log.%i.zip</fileNamePattern>
+       <minIndex>1</minIndex>
+       <maxIndex>20</maxIndex>
+     </rollingPolicy>
+@@ -49,5 +49,4 @@
+     <appender-ref ref="STDOUT" />
+   </root>
+   
+-  <logger name="com.thinkaurelius.thrift" level="ERROR"/>
+ </configuration>
