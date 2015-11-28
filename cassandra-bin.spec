@@ -54,7 +54,7 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 %build
 # current version of cqlsh supports only python 2.
 cd pylib
-%{__python} setup.py build --build-base build-2 %{?with_tests:test}
+%py_build %{?with_tests:test}
 cd ..
 
 %install
@@ -77,11 +77,7 @@ cp -p conf/{*.properties,cassandra-env.sh,cassandra.yaml,README.txt} $RPM_BUILD_
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
 
 cd pylib
-%{__python} setup.py \
-        build --build-base build-2 \
-        install --skip-build \
-        --optimize=2 \
-        --root=$RPM_BUILD_ROOT
+%py_install
 cd ..
 
 %clean
