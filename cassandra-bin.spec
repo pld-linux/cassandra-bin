@@ -25,7 +25,7 @@ URL:		http://cassandra.apache.org/
 BuildRequires:	python-distribute
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.300
+BuildRequires:	rpmbuild(macros) >= 1.710
 Requires(post,preun):	/sbin/chkconfig
 Requires:	python
 Requires:	python-modules
