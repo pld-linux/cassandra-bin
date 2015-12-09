@@ -4,18 +4,20 @@
 # TODO: Consider adding
 #		cassandra	-	memlock	unlimited
 #   to /etc/security/limits.conf ?
+# TODO: C java-jna is only valid with openjdk8-jre ?
+#   cassandra running java from openjdk8-jre-8u66.b02-2.x86_64  fails with  java-jna-4.2.1-1.x86_64 but without clamis JNA to work in logs 
 
 %define	shname cassandra
 %include	/usr/lib/rpm/macros.java
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	2.1.11
-Release:	0.3
+Version:	2.1.12
+Release:	1
 License:	ASF
 Group:		Applications/Databases
 Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	9f6c940e4201575804d07a2e103d1d61
+# Source0-md5:	1155a502c30ec3797bee11b0412733c9
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
@@ -31,7 +33,8 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	python
 Requires:	python-modules
 Requires:	rc-scripts
-Suggests:	java-jna
+Requires:	jre >= 1.7 
+Conflicts:	java-jna
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
