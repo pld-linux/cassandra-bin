@@ -26,7 +26,7 @@ URL:		http://cassandra.apache.org/
 BuildRequires:	python-distribute
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.300
+BuildRequires:	rpmbuild(macros) >= 1.710
 Requires(post,preun):	/sbin/chkconfig
 Requires:	python
 Requires:	python-modules
@@ -56,7 +56,7 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 %build
 # current version of cqlsh supports only python 2.
 cd pylib
-%{__python} setup.py build --build-base build-2 %{?with_tests:test}
+%py_build %{?with_tests:test}
 cd ..
 
 %install
@@ -82,11 +82,7 @@ cp -p conf/triggers/*.txt  $RPM_BUILD_ROOT/var/lib/%{shname}/conf/triggers
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
 
 cd pylib
-%{__python} setup.py \
-        build --build-base build-2 \
-        install --skip-build \
-        --optimize=2 \
-        --root=$RPM_BUILD_ROOT
+%py_install
 cd ..
 
 %clean
