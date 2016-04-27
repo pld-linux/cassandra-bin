@@ -12,12 +12,12 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	2.1.12
+Version:	2.1.14
 Release:	1
 License:	ASF
 Group:		Applications/Databases
 Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	1155a502c30ec3797bee11b0412733c9
+# Source0-md5:	e6e3676ca3a508ad827281ad9db9b45c
 Source1:	cassandra.in.sh
 Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
@@ -135,7 +135,7 @@ fi
 
 %attr(750,cassandra,cassandra) %dir /var/log/%{shname}
 %attr(750,cassandra,cassandra) %dir /var/run/%{shname}
-%{py_sitescriptdir}/cqlshlib
+%{py_sitedir}/cqlshlib
 %if "%{py_ver}" > "2.4"
-	%{py_sitescriptdir}/cassandra_pylib-0.0.0-py*.egg-info
+	%{py_sitedir}/cassandra_pylib-0.0.0-py*.egg-info
 %endif
