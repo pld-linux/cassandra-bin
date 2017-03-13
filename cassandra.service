@@ -1,0 +1,30 @@
+[Unit]
+Description=Cassandra node
+After=network.target
+
+[Service]
+User=cassandra
+Group=cassandra
+
+Type=forking
+PIDFile=/var/run/cassandra/cassandra.pid
+ExecStart=/usr/sbin/cassandra -p /var/run/cassandra/cassandra.pid 
+
+ExecStop=/usr/bin/nodetool flush
+ExecStop=/usr/bin/nodetool drain
+SuccessExitStatus=143
+
+StandardOutput=journal
+StandardError=journal
+LimitNOFILE=100000
+LimitMEMLOCK=infinity
+LimitNPROC=32768
+LimitAS=infinity
+
+RestartSec=10s
+
+# Restarts on abnormal termination
+Restart=on-abort
+
+[Install]
+WantedBy=default.target

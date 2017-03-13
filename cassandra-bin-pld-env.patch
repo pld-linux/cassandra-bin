@@ -1,0 +1,11 @@
+--- apache-cassandra-3.0.10/conf/cassandra-env.ps1.pld-env	2016-12-12 16:51:23.612423230 +0100
++++ apache-cassandra-3.0.10/conf/cassandra-env.ps1	2016-12-12 16:53:06.880817179 +0100
+@@ -311,7 +311,7 @@ Function SetCassandraEnvironment
+     $env:CASSANDRA_CONF = "$env:CASSANDRA_HOME\conf"
+     $env:CASSANDRA_PARAMS="-Dcassandra -Dlogback.configurationFile=logback.xml"
+ 
+-    $logdir = "$env:CASSANDRA_HOME\logs"
++    $logdir = "/var/log/cassandra"
+     $storagedir = "$env:CASSANDRA_HOME\data"
+     $env:CASSANDRA_PARAMS = $env:CASSANDRA_PARAMS + " -Dcassandra.logdir=""$logdir"" -Dcassandra.storagedir=""$storagedir"""
+ 

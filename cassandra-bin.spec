@@ -1,39 +1,37 @@
-# TODO: Fix .init cassandra status does not work now.
-# TODO: Fix .init stop routine it is now subset of PLD default one
 # TODO: Fix of data/ cassandra created dirs/files privilages (now they are all readable)
 # TODO: Consider adding
 #		cassandra	-	memlock	unlimited
 #   to /etc/security/limits.conf ?
 # TODO: C java-jna is only valid with openjdk8-jre ?
-#   cassandra running java from openjdk8-jre-8u66.b02-2.x86_64  fails with  java-jna-4.2.1-1.x86_64 but without clamis JNA to work in logs 
+#   cassandra running java from openjdk8-jre-8u66.b02-2.x86_64  fails with  java-jna-4.2.1-1.x86_64 but without clamis JNA to work in logs
 
 %define	shname cassandra
 %include	/usr/lib/rpm/macros.java
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	2.1.16
-Release:	1
+Version:	3.0.12
+Release:	0.1
 License:	ASF
 Group:		Applications/Databases
 Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	cc11eadd767e0200d412b7a0bde6a9f5
+# Source0-md5:	71ebbfdae273a59ca202c4019e1f74a7
 Source1:	cassandra.in.sh
-Source2:	%{shname}.init
 Source3:	%{name}.tmpfiles
+Source4:	%{shname}.service
 Patch0:		%{name}-jamm_path_fix.patch
-Patch1:		%{name}-cqlsh_path_fix.patch
-Patch2:		%{name}-pld_logging.patch
+Patch3:		%{name}-pld-env.patch
+
 URL:		http://cassandra.apache.org/
 BuildRequires:	python-distribute
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.710
-Requires(post,preun):	/sbin/chkconfig
+Requires(post,preun,postun):	systemd-units >= 38
+Requires:	jre >= 1.7
 Requires:	python
 Requires:	python-modules
-Requires:	rc-scripts
-Requires:	jre >= 1.7 
+Requires:	systemd-units >= 0.38
 Conflicts:	java-jna
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -52,8 +50,9 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 %prep
 %setup -q -n apache-cassandra-%{version}
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch3 -p1
+# Fix logging dir
+%{__sed} -i -e 's#$CASSANDRA_HOME/logs#/var/log/cassandra#g' bin/cassandra
 
 %build
 # current version of cqlsh supports only python 2.
@@ -63,22 +62,21 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d/,%{_sysconfdir}/%{shname},%{_bindir},%{_sbindir},%{_datadir}/%{shname}} \
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{shname},%{_bindir},%{_sbindir},%{_datadir}/%{shname}} \
 	$RPM_BUILD_ROOT/var/{lib/%{shname}/{commitlog,conf,data,saved_caches},{log,run}/%{shname}} \
-	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir} $RPM_BUILD_ROOT/%{systemdunitdir}
 
-cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/cassandra
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{systemdunitdir}/%{shname}.service
 
 rm bin/*.bat
-cp -p bin/{cqlsh,*sstable*,*tool,cassandra-cli} $RPM_BUILD_ROOT%{_bindir}
+cp -p bin/{cqlsh*,*sstable*,*tool} $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # use bundled libs for python-cql - from cqlsh doc
 # cp -p %{SOURCE1} lib/cql-internal-only-1.4.2.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # cp -p %{SOURCE1} lib/thrift-python-internal-only-0.9.1.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p %{SOURCE1} lib/*.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
-cp -p conf/{*.properties,*.yaml,*.xml,cassandra-env.sh,hotspot_compiler,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
-# ,triggers
+cp -p conf/{*.properties,*.yaml,*.xml,cassandra-env.sh,hotspot_compiler,jvm.options,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
 install -d $RPM_BUILD_ROOT/var/lib/%{shname}/conf/triggers
 cp -p conf/triggers/*.txt  $RPM_BUILD_ROOT/var/lib/%{shname}/conf/triggers
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
@@ -95,37 +93,39 @@ rm -rf $RPM_BUILD_ROOT
 %useradd -M -o -r -u 259 -d /var/lib/%{shname} -s /bin/sh -g cassandra -c "Cassandra Server" cassandra
 
 %post
-/sbin/chkconfig --add cassandra
-%service cassandra restart
+%systemd_post %{shname}.service
 
 %preun
+%systemd_preun %{shname}.service
+
+%postun
+%systemd_reload
 if [ "$1" = "0" ]; then
-	%service cassandra stop
-	/sbin/chkconfig --del cassandra
+	%userremove %{shname}
+	%groupremove %{shname}
 fi
 
 %files
 %defattr(644,root,root,755)
 %doc CHANGES.txt LICENSE.txt NEWS.txt NOTICE.txt
-%attr(754,root,root) /etc/rc.d/init.d/cassandra
-%attr(755,root,root) %{_bindir}/cassandra-cli
 %attr(755,root,root) %{_bindir}/cqlsh
+%{_bindir}/cqlsh.py
 %attr(755,root,root) %{_bindir}/nodetool
-# %attr(755,root,root) %{_bindir}/json2sstable
-## %attr(755,root,root) %{_bindir}/sstable2json
 %attr(755,root,root) %{_bindir}/sstablescrub
-%attr(755,root,root) %{_bindir}/sstablekeys
 %attr(755,root,root) %{_bindir}/sstableloader
-## %attr(755,root,root) %{_bindir}/sstablesplit
 %attr(755,root,root) %{_bindir}/sstableupgrade
+%attr(755,root,root) %{_bindir}/sstableutil
+%attr(755,root,root) %{_bindir}/sstableverify
 %attr(755,root,root) %{_sbindir}/cassandra
 %{_datadir}/%{shname}
+%{systemdunitdir}/%{shname}.service
 %{systemdtmpfilesdir}/%{shname}.conf
 %attr(750,cassandra,cassandra) %dir /var/lib/%{shname}
 %attr(750,root,cassandra) %dir /var/lib/%{shname}/conf
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.properties
 %attr(755,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.sh
 %attr(640,root,cassandra) /var/lib/%{shname}/conf/*.txt
+%attr(640,root,cassandra) /var/lib/%{shname}/conf/jvm.options
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.yaml
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.xml
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/hotspot_compiler
