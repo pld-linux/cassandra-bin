@@ -6,7 +6,6 @@
 #   cassandra running java from openjdk8-jre-8u66.b02-2.x86_64  fails with  java-jna-4.2.1-1.x86_64 but without clamis JNA to work in logs
 
 %define	shname cassandra
-%include	/usr/lib/rpm/macros.java
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
