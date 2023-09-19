@@ -9,18 +9,17 @@
 Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
-Version:	3.0.12
+Version:	4.1.3
 Release:	1
 License:	ASF
 Group:		Applications/Databases
-Source0:	ftp://ftp.task.gda.pl/pub/www/apache/dist/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
-# Source0-md5:	71ebbfdae273a59ca202c4019e1f74a7
+Source0:	https://dlcdn.apache.org/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
+# Source0-md5:	f2f148d0c7af65375caedb074dde93d1
 Source1:	cassandra.in.sh
 Source3:	%{name}.tmpfiles
 Source4:	%{shname}.service
 Patch0:		%{name}-jamm_path_fix.patch
 Patch3:		%{name}-pld-env.patch
-
 URL:		http://cassandra.apache.org/
 BuildRequires:	python-distribute
 BuildRequires:	rpm-javaprov
@@ -56,7 +55,7 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 %build
 # current version of cqlsh supports only python 2.
 cd pylib
-%py_build %{?with_tests:test}
+%py3_build %{?with_tests:test}
 cd ..
 
 %install
@@ -67,7 +66,6 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir}/%{shname},%{_bindir},%{_sbindir},%{_da
 
 cp -p %{SOURCE4} $RPM_BUILD_ROOT%{systemdunitdir}/%{shname}.service
 
-rm bin/*.bat
 cp -p bin/{cqlsh*,*sstable*,*tool} $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/cassandra $RPM_BUILD_ROOT%{_sbindir}
 cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
@@ -75,13 +73,13 @@ cp -p %{SOURCE1} lib/*.jar $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # cp -p %{SOURCE1} lib/cql-internal-only-1.4.2.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 # cp -p %{SOURCE1} lib/thrift-python-internal-only-0.9.1.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
 cp -p %{SOURCE1} lib/*.zip $RPM_BUILD_ROOT%{_datadir}/%{shname}
-cp -p conf/{*.properties,*.yaml,*.xml,cassandra-env.sh,hotspot_compiler,jvm.options,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
+cp -p conf/{*.properties,*.yaml,*.xml,cassandra-env.sh,hotspot_compiler,README.txt} $RPM_BUILD_ROOT/var/lib/%{shname}/conf
 install -d $RPM_BUILD_ROOT/var/lib/%{shname}/conf/triggers
 cp -p conf/triggers/*.txt  $RPM_BUILD_ROOT/var/lib/%{shname}/conf/triggers
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{shname}.conf
 
 cd pylib
-%py_install
+%py3_install
 cd ..
 
 %clean
@@ -124,7 +122,6 @@ fi
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.properties
 %attr(755,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.sh
 %attr(640,root,cassandra) /var/lib/%{shname}/conf/*.txt
-%attr(640,root,cassandra) /var/lib/%{shname}/conf/jvm.options
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.yaml
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/*.xml
 %attr(640,root,cassandra) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{shname}/conf/hotspot_compiler
@@ -133,7 +130,5 @@ fi
 
 %attr(750,cassandra,cassandra) %dir /var/log/%{shname}
 %attr(750,cassandra,cassandra) %dir /var/run/%{shname}
-%{py_sitedir}/cqlshlib
-%if "%{py_ver}" > "2.4"
-	%{py_sitedir}/cassandra_pylib-0.0.0-py*.egg-info
-%endif
+%{py3_sitedir}/cqlshlib
+%{py3_sitedir}/cassandra_pylib-0.0.0-py*.egg-info

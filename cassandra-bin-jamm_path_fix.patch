@@ -1,11 +1,11 @@
 --- ./conf/cassandra-env.sh.jamm_path_fix	2014-10-21 16:31:37.000000000 +0200
 +++ ./conf/cassandra-env.sh	2015-01-12 21:31:40.086273885 +0100
 @@ -168,7 +168,7 @@ JMX_PORT="7199"
- JVM_OPTS="$JVM_OPTS -ea"
+ JVM_OPTS="$JVM_OPTS -XX:CompileCommandFile=$CASSANDRA_CONF/hotspot_compiler"
  
  # add the jamm javaagent
--JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.3.0.jar"
-+JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/cassandra/jamm-0.3.0.jar"
+-JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.3.2.jar"
++JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/cassandra/jamm-0.3.2.jar"
  
- # some JVMs will fill up their heap when accessed via JMX, see CASSANDRA-6541
- JVM_OPTS="$JVM_OPTS -XX:+CMSClassUnloadingEnabled"
+ # set jvm HeapDumpPath with CASSANDRA_HEAPDUMP_DIR
+ if [ "x$CASSANDRA_HEAPDUMP_DIR" != "x" ]; then
