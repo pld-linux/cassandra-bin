@@ -10,7 +10,7 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	4.1.3
-Release:	
+Release:	2
 License:	ASF
 Group:		Applications/Databases
 Source0:	https://dlcdn.apache.org/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
@@ -47,8 +47,8 @@ oparty na ColumnFamily, bogatszy niż typowe systemy klucza i wartości.
 
 %prep
 %setup -q -n apache-cassandra-%{version}
-%patch0 -p1
-%patch3 -p1
+%patch -P 0 -p1
+%patch -P 3 -p1
 # Fix logging dir
 %{__sed} -i -e 's#$CASSANDRA_HOME/logs#/var/log/cassandra#g' bin/cassandra
 
