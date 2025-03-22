@@ -10,7 +10,7 @@ Summary:	Cassandra database binary package
 Summary(pl.UTF-8):	Binarna redystrybucja bazy danych Cassandra
 Name:		cassandra-bin
 Version:	4.1.3
-Release:	3
+Release:	4
 License:	ASF
 Group:		Applications/Databases
 Source0:	https://dlcdn.apache.org/cassandra/%{version}/apache-cassandra-%{version}-bin.tar.gz
@@ -30,6 +30,8 @@ Requires:	jre >= 1.7
 Requires:	python
 Requires:	python-modules
 Requires:	systemd-units >= 0.38
+Provides:	group(cassandra)
+Provides:	user(cassandra)
 Conflicts:	java-jna
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -98,8 +100,8 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 %systemd_reload
 if [ "$1" = "0" ]; then
-	%userremove %{shname}
-	%groupremove %{shname}
+	%userremove cassandra
+	%groupremove cassandra
 fi
 
 %files
